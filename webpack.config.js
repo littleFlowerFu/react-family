@@ -1,6 +1,7 @@
 const path = require('path')
 const webpack = require('webpack')
 var HtmlWebpachPlugin = require('html-webpack-plugin');
+const UglifyJSPlugin = require('uglifyjs-webpack-plugin')
 
 module.exports = {
   // 入口
@@ -49,7 +50,8 @@ module.exports = {
     }),
     new webpack.optimize.CommonsChunkPlugin({
       name: 'vendor'
-    })
+    }),
+    new UglifyJSPlugin()
   ],
   
   resolve: {

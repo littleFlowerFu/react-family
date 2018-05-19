@@ -4,6 +4,7 @@ var HtmlWebpachPlugin = require('html-webpack-plugin');
 
 module.exports = {
   // 入口
+  devtool: 'cheap-module-source-map',
   entry: {
     app: [
       'react-hot-loader/patch',
@@ -41,15 +42,7 @@ module.exports = {
       }
     ]
   },
-  devServer: {
-    port: 8080,
-    hot: true,
-    contentBase: path.join(__dirname, './dist'),
-    historyApiFallback: true,
-    host: '0.0.0.0'
-  },
   plugins: [
-    new webpack.HotModuleReplacementPlugin(),
     new HtmlWebpachPlugin({
       filename: 'index.html',
       template: path.join(__dirname, 'src/index.html')

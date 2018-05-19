@@ -18,11 +18,24 @@ module.exports = {
   *cacheDirectory是用来缓存编译结果，下次编译加速
   */
   module: {
-    rules: [{
+    rules: [
+      {
       test: /\.js$/,
       use: ['babel-loader?cacheDirectory=true'],
       include: path.join(__dirname, 'src')
-    }]
+      },{
+        test: /\.css$/,
+        use: ['style-loader', 'css-loader']
+      }, {
+        test: /\.(png|jpg|gif)/,
+        use: [{
+          loader: 'url-loader',
+          options: {
+            limit: 8192  // 小于等于8k的图片会被转成base64编码，直接插入html中，减少http请求
+          }
+        }]
+      }
+    ]
   },
   devServer: {
     port: 8080,

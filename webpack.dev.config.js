@@ -1,5 +1,6 @@
 const path = require('path')
 const webpack = require('webpack')
+var HtmlWebpachPlugin = require('html-webpack-plugin');
 
 module.exports = {
   // 入口
@@ -12,7 +13,8 @@ module.exports = {
 
   output: {
     path: path.join(__dirname, './dist'),
-    filename: 'bundle.js'
+    filename: 'bundle.js',
+    chunkFilename: '[name].[chunkhash].js'
   },
   /*src文件夹下面的以.js结尾的文件，要使用babel解析
   *cacheDirectory是用来缓存编译结果，下次编译加速
@@ -45,8 +47,13 @@ module.exports = {
     host: '0.0.0.0'
   },
   plugins: [
-    new webpack.HotModuleReplacementPlugin()
+    new webpack.HotModuleReplacementPlugin(),
+    new HtmlWebpachPlugin({
+      filename: 'index.html',
+      template: path.join(__dirname, 'src/index.html')
+    })
   ],
+  
   resolve: {
     alias: {
       pages: path.join(__dirname, 'src/pages'),

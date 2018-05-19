@@ -1,7 +1,8 @@
 const path = require('path')
 const webpack = require('webpack')
 var HtmlWebpachPlugin = require('html-webpack-plugin');
-const UglifyJSPlugin = require('uglifyjs-webpack-plugin')
+const UglifyJSPlugin = require('uglifyjs-webpack-plugin');
+const CleanWebpackPlugin = require('clean-webpack-plugin')
 
 module.exports = {
   // 入口
@@ -16,6 +17,7 @@ module.exports = {
   /*输出到dist文件夹，输出文件名字为bundle.js*/
 
   output: {
+    publicPath: '/',
     path: path.join(__dirname, './dist'),
     filename: '[name].[hash].js',
     chunkFilename: '[name].[chunkhash].js'
@@ -51,7 +53,17 @@ module.exports = {
     new webpack.optimize.CommonsChunkPlugin({
       name: 'vendor'
     }),
-    new UglifyJSPlugin()
+    new UglifyJSPlugin(),
+    // 指定环境
+    new webpack.DefinePlugin({
+      'process.env': {
+        'NODE_ENV': JSON.stringify('production')
+      }
+    }), 
+    // 优化缓存
+    new wepack.HashedModuleIdsPlugin(),
+    // 打包优化
+    new CleanWebpackPlugin(['dist'])
   ],
   
   resolve: {

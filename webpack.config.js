@@ -2,7 +2,8 @@ const path = require('path')
 const webpack = require('webpack')
 var HtmlWebpachPlugin = require('html-webpack-plugin');
 const UglifyJSPlugin = require('uglifyjs-webpack-plugin');
-const CleanWebpackPlugin = require('clean-webpack-plugin')
+const CleanWebpackPlugin = require('clean-webpack-plugin');
+const ExtractTextPlugin = require("extract-text-webpack-plugin")
 
 module.exports = {
   // 入口
@@ -31,10 +32,16 @@ module.exports = {
       test: /\.js$/,
       use: ['babel-loader?cacheDirectory=true'],
       include: path.join(__dirname, 'src')
-      },{
+      },
+      {
         test: /\.css$/,
-        use: ['style-loader', 'css-loader']
-      }, {
+        // use: ['style-loader', 'css-loader']
+        use: ExtractTextPlugin.extract({
+          fallback: "style-loader",
+          use: "css-loader"
+        })
+      }, 
+      {
         test: /\.(png|jpg|gif)/,
         use: [{
           loader: 'url-loader',
@@ -61,9 +68,14 @@ module.exports = {
       }
     }), 
     // 优化缓存
-    new wepack.HashedModuleIdsPlugin(),
+    new webpack.HashedModuleIdsPlugin(),
     // 打包优化
-    new CleanWebpackPlugin(['dist'])
+    new CleanWebpackPlugin(['dist']),
+    // 抽取css
+    new ExtractTextPlugin({
+      filename: '[name].[contenthash:5].css',
+      allChunks: true
+    })
   ],
   
   resolve: {
